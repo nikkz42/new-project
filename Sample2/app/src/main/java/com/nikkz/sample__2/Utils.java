@@ -20,10 +20,7 @@ public class Utils {
     /** Tag for the log messages */
     public static final String LOG_TAG = Utils.class.getSimpleName();
 
-    /**
-     * Query the USGS dataset and return an {@link Event} object to represent a single earthquake.
-     */
-    public static Event fetchEarthquakeData(String requestUrl) {
+    public static Event fetchCovidData(String requestUrl) {
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -36,10 +33,10 @@ public class Utils {
         }
 
         // Extract relevant fields from the JSON response and create an {@link Event} object
-        Event earthquake = extractFeatureFromJson(jsonResponse);
+        Event covid = extractFeatureFromJson(jsonResponse);
 
         // Return the {@link Event}
-        return earthquake;
+        return covid;
     }
 
     /**
@@ -118,24 +115,23 @@ public class Utils {
      * Return an {@link Event} object by parsing out information
      * about the first earthquake from the input earthquakeJSON string.
      */
-    private static Event extractFeatureFromJson(String earthquakeJSON) {
+    private static Event extractFeatureFromJson(String covidJSON) {
         // If the JSON string is empty or null, then return early.
-        if (TextUtils.isEmpty(earthquakeJSON)) {
+        if (TextUtils.isEmpty(covidJSON)) {
             return null;
         }
 
         try {
-            JSONObject baseJsonResponse = new JSONObject(earthquakeJSON);
-            JSONObject featureArray = baseJsonResponse.getJSONObject("data");
-            JSONArray summary=featureArray.getJSONArray("statewise");
+            JSONObject baseJsonResponse = new JSONObject(covidJSON);
+            JSONObject feature = baseJsonResponse.getJSONObject("data");
+            JSONArray summary=feature.getJSONArray("statewise");
 
 
-            // If there are results in the features array
-                    // Extract out the first feature (which is an earthquake)
+
                     JSONObject firstFeature = summary.getJSONObject(17);
 
 
-                // Extract out the title, number of people, and perceived strength values
+
                 String confirmed = firstFeature.getString("confirmed");
                 String recovered = firstFeature.getString("recovered");
                 String death = firstFeature.getString("deaths");

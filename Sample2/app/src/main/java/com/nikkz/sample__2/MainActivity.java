@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EarthquakeAsyncTask task=new EarthquakeAsyncTask();
+        CovidAsyncTask task=new CovidAsyncTask();
         task.execute(USGS_REQUEST_URL);
 
         // Perform the HTTP request and process the response.
@@ -24,24 +25,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.keralamenu,menu);
+        return true;
+    }
+
     /**
      * Update the UI with the given information.
      */
-    private void updateUi(Event earthquake) {
+    private void updateUi(Event covid) {
         TextView confirmedTextView = (TextView) findViewById(R.id.confirmed);
-        confirmedTextView.setText(earthquake.mConfirmed);
+        confirmedTextView.setText(covid.mConfirmed);
 
         TextView recoveredTextView = (TextView) findViewById(R.id.recovered);
-        recoveredTextView.setText(earthquake.mRecovered);
+        recoveredTextView.setText(covid.mRecovered);
 
         TextView deathTextView = (TextView) findViewById(R.id.deaths);
-        deathTextView.setText(earthquake.mDeaths);
+        deathTextView.setText(covid.mDeaths);
 
         TextView activeTextView = (TextView) findViewById(R.id.active);
-        activeTextView.setText(earthquake.mActive);
+        activeTextView.setText(covid.mActive);
     }
 
-    private class EarthquakeAsyncTask extends AsyncTask<String,Void,Event>{
+    private class  CovidAsyncTask extends AsyncTask<String,Void,Event>{
 
         @Override
         protected Event doInBackground(String... strings) {
@@ -49,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 return null;
             }
 
-            Event earthquake = Utils.fetchEarthquakeData(USGS_REQUEST_URL);
+            Event earthquake = Utils.fetchCovidData(USGS_REQUEST_URL);
             return earthquake;
         }
 
